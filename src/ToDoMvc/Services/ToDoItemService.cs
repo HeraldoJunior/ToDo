@@ -1,16 +1,44 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ToDoMvc.Data;
 using ToDoMvc.Models;
 
 namespace ToDoMvc.Services
 {
     public class ToDoItemService : IToDoItemService
     {
-        public Task<IEnumerable<ToDoItem>> GetIncompleteItemAsync()
+        private readonly ApplicationDbContext _context;
+
+        public ToDoItemService(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+
+        public async Task<bool> AddItemAsync(NewToDoItem newItem)
+        {
+            var entity = new ToDoItem
+            {
+                Id = Guid.NewGuid(),
+                IsDone = false,
+                Title = newItem.Title,
+                DueAt = newItem.DueAt
+            };
+
+            _context.Items.Add(entity);
+
+            var saveResult = await _context.SaveChangesAsync();
+
+            return saveResult == 1;
+        }
+
+        public async Task<IEnumerable<ToDoItem>> GetIncompleteItemAsync()
+        {
+            return await _context.Items
+                .Where(i => !i.IsDone)
+                .ToArrayAsync();
         }
     }
 }
