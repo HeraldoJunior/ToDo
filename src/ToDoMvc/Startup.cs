@@ -27,7 +27,7 @@ namespace ToDoMvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-             options.UseSqlite(Configuration.GetConnectionString("SQLite")));
+                options.UseSqlite(Configuration.GetConnectionString("SQLite")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

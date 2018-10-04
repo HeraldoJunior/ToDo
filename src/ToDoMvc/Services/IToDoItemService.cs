@@ -8,8 +8,8 @@ namespace ToDoMvc.Services
 {
     public interface IToDoItemService
     {
+        Task<IEnumerable<ToDoItem>> GetIncompleteItemsAsync();
 
-        Task<IEnumerable<ToDoItem>> GetIncompleteItemAsync();
         Task<bool> AddItemAsync(NewToDoItem newItem);
         Task<bool> MarkDoneAsync(Guid id);
     }

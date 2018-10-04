@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +26,6 @@ namespace ToDoMvc.Services
                 Title = newItem.Title,
                 DueAt = newItem.DueAt
             };
-
             _context.Items.Add(entity);
 
             var saveResult = await _context.SaveChangesAsync();
@@ -34,27 +33,22 @@ namespace ToDoMvc.Services
             return saveResult == 1;
         }
 
-        public async Task<IEnumerable<ToDoItem>> GetIncompleteItemAsync()
+        public async Task<IEnumerable<ToDoItem>> GetIncompleteItemsAsync()
         {
             return await _context.Items
                 .Where(i => !i.IsDone)
                 .ToArrayAsync();
+            
         }
 
         public async Task<bool> MarkDoneAsync(Guid id)
         {
             var item = await _context.Items.FirstOrDefaultAsync(i => i.Id == id);
-        
+
             if (item == null) return false;
-
             item.IsDone = true;
-
             var saveResult = await _context.SaveChangesAsync();
-
             return saveResult == 1;
-
-
-
         }
     }
 }
